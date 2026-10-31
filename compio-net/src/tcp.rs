@@ -172,6 +172,16 @@ impl TcpListener {
         self.inner.socket.take_error()
     }
 
+    /// Create [`PollFd`] from inner socket.
+    pub fn to_poll_fd(&self) -> io::Result<PollFd<Socket2>> {
+        self.inner.to_poll_fd()
+    }
+
+    /// Create [`PollFd`] from inner socket.
+    pub fn into_poll_fd(self) -> io::Result<PollFd<Socket2>> {
+        self.inner.into_poll_fd()
+    }
+
     /// Gets the value of the `IP_TTL` option for this socket.
     ///
     /// For more information about this option, see [`set_ttl_v4`].

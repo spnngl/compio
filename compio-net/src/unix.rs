@@ -144,6 +144,16 @@ impl UnixListener {
     pub fn take_error(&self) -> io::Result<Option<io::Error>> {
         self.inner.socket.take_error()
     }
+
+    /// Create [`PollFd`] from inner socket.
+    pub fn to_poll_fd(&self) -> io::Result<PollFd<Socket2>> {
+        self.inner.to_poll_fd()
+    }
+
+    /// Create [`PollFd`] from inner socket.
+    pub fn into_poll_fd(self) -> io::Result<PollFd<Socket2>> {
+        self.inner.into_poll_fd()
+    }
 }
 
 impl_raw_fd!(UnixListener, socket2::Socket, inner, socket);
