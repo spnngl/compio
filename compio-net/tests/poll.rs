@@ -302,3 +302,15 @@ fn fill_send_buffer(socket: &Socket) -> usize {
         }
     }
 }
+
+#[compio_macros::test]
+async fn listener_into_poll_fd() {
+    let listener = compio_net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let addr = listener.local_addr().unwrap();
+    let listener = listener.into_poll_fd().unwrap();
+
+    let client = compio_net::TcpStream::connect(addr).await.unwrap();
+    let (server, peer) = listener.accept().await.unwrap();
+    assert_eq!(peer.as_socket(), Some(client.local_addr().unwrap()));
+    assert_eq!(server.local_addr().unwrap().as_socket(), Some(addr),);
+}
