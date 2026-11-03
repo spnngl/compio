@@ -255,6 +255,10 @@ macro_rules! fuse_op {
                     ) -> std::task::Poll<std::io::Result<usize>> {
                         self.inner.poll().operate(control)
                     }
+
+                    unsafe fn set_result(&mut self, control: &mut <Self as PollOpCode>::Control, result: &std::io::Result<usize>, extra: &crate::Extra) {
+                        unsafe { PollOpCode::set_result(self.inner.poll(), control, result, extra) }
+                    }
                 }
 
                 unsafe impl<$($ty: $trait),*> IourOpCode for $name<$($ty),*> {
