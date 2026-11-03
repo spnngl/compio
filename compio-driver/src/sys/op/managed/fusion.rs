@@ -85,6 +85,10 @@ macro_rules! mop {
                 ) -> std::task::Poll<std::io::Result<usize>> {
                     self.inner.poll().operate(control)
                 }
+
+                unsafe fn set_result(&mut self, control: &mut Self::Control, result: &std::io::Result<usize>, extra: &crate::Extra) {
+                    unsafe { self.inner.poll().set_result(control, result, extra) }
+                }
             }
 
             unsafe impl<$($ty: $trait),*> IourOpCode for $name<$($ty),*> {
